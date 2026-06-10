@@ -32,6 +32,16 @@ flowchart LR
   C --> G
   D --> E
 ```
+## Local development
+
+### Local prerequisites
+
+- Docker
+- Python 3.12+
+- Make / bash shell
+- kind
+- kubectl
+- helm
 
 ### Run locally with Python
 
@@ -50,3 +60,43 @@ flowchart LR
    ```
 
 3. Visit `http://127.0.0.1:8000/docs`
+
+### Run locally with Docker + kind + Makefile
+
+```bash
+make help
+```
+
+1. Build the Docker image:
+
+   ```bash
+   make docker-build
+   ```
+
+2. Create a kind cluster with the provided config:
+
+   ```bash
+   make kind-create
+   ```
+
+3. Load the image into kind:
+
+   ```bash
+   make kind-load
+   ```
+
+4. Install the Helm chart with the local image:
+
+   ```bash
+   make kind-deploy
+   ```
+
+5. Forward the service port:
+
+   ```bash
+   kubectl port-forward svc/online-store 8000:80
+   ```
+
+6. Open `http://127.0.0.1:8000/docs` `http://127.0.0.1:8000/products`
+
+> To tear down the local cluster, run `make kind-clean`.
