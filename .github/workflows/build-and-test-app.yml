@@ -1,0 +1,95 @@
+# build application image and test in Kind cluster
+# For more information see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-python
+
+name: Build and Test
+
+on:
+  push:
+    branches: [ "main" ]
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v4
+    - name: Set up Python 3.10
+      uses: actions/setup-python@v3
+      with:
+        python-version: "3.10"
+
+      # Install deps
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install flake8 pytest
+        if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
+
+      # Check code for syntax errors
+    - name: Lint with flake8
+      run: |
+        # stop the build if there are Python syntax errors or undefined names
+        flake8 . --count --select=E9,F63,F7,F82 --show-source --statistics
+        # exit-zero treats all errors as warnings. The GitHub editor is 127 chars wide
+        flake8 . --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
+
+      # Run Tests
+    - name: Test with pytest
+      run: |
+        pytest -q
+
+      # Install prerequisites
+    - name: Install prerequisites (make)
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y make
+
+    - name: Set up Docker Buildx
+      uses: docker/setup-buildx-action@v2
+
+    - name: Set up Kind
+      uses: engineerd/setup-kind@v0.11.0
+
+    - name: Install kubectl
+      uses: azure/setup-kubectl@v3
+
+    - name: Install Helm
+      uses: azure/setup-helm@v1
+
+      # Build docker image and load it to Kind cluster
+    - name: Build and load docker image to Kind Cluster
+      run: |
+        # Build local docker image
+        make docker-build
+        # Load local image into kind
+        make kind-load
+
+      # Install Helm chart and verify pods are running
+    - name: Deploy App to the cluster
+      env:
+        KUBECONFIG: ${{ runner.temp }}/kubeconfig
+      run: |
+        # Deploy Helm chart to the kind cluster
+        make kind-deploy
+        kubectl get pod
+
+      # Forward port
+    - name: Forward the service port
+      run: kubectl port-forward svc/online-store 8000:80
+
+      # Test the API endpoint
+    - name: Curl to the API Healthcheck endpoint
+      run: curl -X GET http://localhost:8000/health
+
+      # Clean up Cluster and Helm release
+    - name: Tear down Kind cluster and Helm release
+      if: always()
+      env:
+        KUBECONFIG: ${{ runner.temp }}/kubeconfig
+      run: |
+        # Clean up cluster and uninstall release even if earlier steps fail
+        make kind-clean || true

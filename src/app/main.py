@@ -16,6 +16,11 @@ def landing_page():
     products = ProductService().list_products()
     return HTMLResponse(content=_render_landing_page(products))
 
+@app.get("/health", summary="Health check")
+def health_check():
+    """Return the health status of the application."""
+    return {"status": "Successfully connected to API."}
+
 @app.get("/products", summary="List all products")
 def get_all_products():
     """Return an HTML page listing all products in the store."""
