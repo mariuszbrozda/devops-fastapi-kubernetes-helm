@@ -101,6 +101,7 @@ jobs:
       run: |
         # Deploy Helm chart to the kind cluster
         make kind-deploy
+        sleep 25
         kubectl get pod
 
       # Forward port and test the API endpoint
