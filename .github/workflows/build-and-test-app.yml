@@ -80,11 +80,11 @@ jobs:
         kubectl get nodes
 
     # Verify Helm can reach cluster
-    - name: Verify Kubernetes access
+    - name: Verify access
       run: |
         kubectl get ns
         helm version
-        helm ls -A
+        helm list -A
         
       # Build docker image and load it to Kind cluster
     - name: Build and load docker image to Kind Cluster
