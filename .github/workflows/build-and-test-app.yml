@@ -84,7 +84,7 @@ jobs:
       run: |
         kubectl get ns
         helm version
-        helm list -A
+        helm list
         
       # Build docker image and load it to Kind cluster
     - name: Build and load docker image to Kind Cluster
