@@ -55,6 +55,10 @@ jobs:
 
     - name: Set up Kind
       uses: engineerd/setup-kind@v0.6.2
+      with:
+        skipClusterCreation: true
+    - name: Verify Kind installation
+      run: kind version
 
     - name: Install kubectl
       uses: azure/setup-kubectl@v3
