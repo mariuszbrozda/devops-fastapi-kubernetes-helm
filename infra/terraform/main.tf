@@ -14,6 +14,17 @@ module "networking" {
   tags = local.common_tags
 }
 
+# ECR module
+module "ecr" {
+  source = "./modules/ecr"
+
+  repository_name      = var.ecr_repository_name
+  image_tag_mutability = var.ecr_image_tag_mutability
+  encryption_type      = var.ecr_encryption_type
+  scan_on_push         = var.ecr_scan_on_push
+
+  tags = local.common_tags
+}
 
 # Local values for common tags
 locals {

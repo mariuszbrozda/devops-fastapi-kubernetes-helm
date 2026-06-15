@@ -64,3 +64,29 @@ variable "enable_dns_support" {
   description = "Enable DNS support in the VPC"
   default     = true
 }
+
+
+# ECR Variables
+variable "ecr_repository_name" {
+  type        = string
+  description = "Name of the ECR repository"
+  default     = "online-store"
+}
+
+variable "ecr_image_tag_mutability" {
+  type        = string
+  description = "The tag mutability setting for the ECR repository"
+  default     = "MUTABLE"
+}
+
+variable "ecr_encryption_type" {
+  type        = string
+  description = "The encryption type to use for ECR"
+  default     = "AES256"
+}
+
+variable "ecr_scan_on_push" {
+  type        = bool
+  description = "Enable image scanning on push for ECR"
+  default     = true
+}
