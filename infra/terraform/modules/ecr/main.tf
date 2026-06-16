@@ -1,35 +1,14 @@
-resource "aws_ecr_repository" "main" {
-  name                 = var.repository_name
-  image_tag_mutability = var.image_tag_mutability
+module "ecr" {
+  source  = "terraform-aws-modules/ecr/aws"
+  version = "~> 1.6"
 
-  encryption_configuration {
-    encryption_type = var.encryption_type
-  }
+  repository_name            = var.repository_name
+  repository_image_tag_mutability = var.image_tag_mutability
+  repository_image_scan_on_push   = var.scan_on_push
+  repository_encryption_type = var.encryption_type
+  repository_encryption_key_arn = var.encryption_key_arn
 
-  image_scanning_configuration {
-    scan_on_push = var.scan_on_push
-  }
+  repository_lifecycle_policy = var.repository_lifecycle_policy
 
   tags = var.tags
-}
-
-resource "aws_ecr_lifecycle_policy" "main" {
-  repository = aws_ecr_repository.main.name
-
-  policy = jsonencode({
-    rules = [
-      {
-        rulePriority = 1
-        description  = "Keep last 10 images"
-        selection = {
-          tagStatus     = "any"
-          countType     = "imageCountMoreThan"
-          countNumber   = 10
-        }
-        action = {
-          type = "expire"
-        }
-      }
-    ]
-  })
 }
