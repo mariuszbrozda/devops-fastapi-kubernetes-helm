@@ -30,12 +30,12 @@ module "ecr" {
 module "eks_cluster" {
   source = "./modules/eks-cluster"
 
-  cluster_name                        = var.cluster_name
-  cluster_version                     = var.cluster_version
-  cluster_endpoint_private_access     = var.cluster_endpoint_private_access
-  cluster_endpoint_public_access      = var.cluster_endpoint_public_access
-  cluster_endpoint_public_access_cidrs = var.cluster_endpoint_public_access_cidrs
-  enable_cluster_creator_admin_permissions           = var.enable_cluster_creator_admin_permissions
+  cluster_name                             = var.cluster_name
+  cluster_version                          = var.cluster_version
+  cluster_endpoint_private_access          = var.cluster_endpoint_private_access
+  cluster_endpoint_public_access           = var.cluster_endpoint_public_access
+  cluster_endpoint_public_access_cidrs     = var.cluster_endpoint_public_access_cidrs
+  enable_cluster_creator_admin_permissions = var.enable_cluster_creator_admin_permissions
 
   vpc_id     = module.networking.vpc_id
   subnet_ids = module.networking.private_subnets

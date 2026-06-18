@@ -119,18 +119,22 @@ jobs:
       with:
         terraform_version: 1.5.0
 
-    - name: Terraform fmt
-      working-directory: infra/terraform
-      run: terraform fmt -check -recursive
+    - name: Verify Terraform
+      run: terraform version
 
     - name: Terraform init
       working-directory: infra/terraform
       run: terraform init
+    
+    - name: Terraform fmt
+      working-directory: infra/terraform
+      run: terraform fmt -check -recursive
 
     - name: Terraform validate
       working-directory: infra/terraform
-      run: terraform validate
+      run: make tf-validate
 
-    - name: Terraform plan
+    - name: Terraform plan quietly
       working-directory: infra/terraform
-      run: terraform plan -input=false -out=tfplan -var-file=terraform.tfvars
+      run: terraform plan -detailed-exitcode -input=false -out=tfplan -var-file=terraform.tfvars > /dev/null
+
