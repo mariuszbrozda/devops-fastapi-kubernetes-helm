@@ -15,6 +15,16 @@ common_tags = {
   ManagedBy   = "Terraform"
 }
 
+# EKS Configuration
+
+# EKS Cluster Configuration
+enable_cluster_creator_admin_permissions  = true
+cluster_name          = "online-store-eks-cluster"
+cluster_version       = "1.31"
+node_desired_capacity = 2
+node_max_capacity     = 3
+node_min_capacity     = 1
+node_instance_types   = ["t3.medium"]
 
 
 

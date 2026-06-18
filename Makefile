@@ -1,4 +1,5 @@
 .PHONY: help local-venv local-run docker-build kind-create kind-load kind-deploy kind-clean clean
+		tf-init tf-validate tf-plan tf-apply tf-destroy
 
 help:
 	@echo "Available targets:"
@@ -10,6 +11,11 @@ help:
 	@echo "  make kind-deploy   Deploy the Helm chart to the kind cluster"
 	@echo "  make kind-clean    Remove the kind cluster and uninstall the release"
 	@echo "  make clean         Remove Python build artifacts"
+	@echo "  make tf-init       Initialize the Terraform configuration"
+	@echo "  make tf-validate   Validate the Terraform configuration"
+	@echo "  make tf-plan       Generate and show an execution plan for Terraform"
+	@echo "  make tf-apply      Apply the Terraform configuration"
+	@echo "  make tf-destroy    Destroy the Terraform configuration"
 
 local-venv:
 	python -m venv .venv
@@ -41,3 +47,18 @@ kind-clean:
 
 clean:
 	rm -rf .venv __pycache__
+
+tf-init:
+	terraform -chdir=infra/terraform init
+
+tf-validate:
+	terraform -chdir=infra/terraform validate
+
+tf-plan:
+	terraform -chdir=infra/terraform plan -out=tfplan -var-file=terraform.tfvars
+
+tf-apply:
+	terraform -chdir=infra/terraform apply tfplan
+
+tf-destroy:
+	terraform -chdir=infra/terraform destroy -var-file=terraform.tfvars

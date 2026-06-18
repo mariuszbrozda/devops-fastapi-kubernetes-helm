@@ -40,3 +40,41 @@ output "region" {
   value       = var.region
   description = "AWS region"
 }
+
+
+# EKS Cluster Outputs
+output "cluster_name" {
+  value       = module.eks_cluster.cluster_id
+  description = "EKS cluster name"
+}
+
+output "cluster_endpoint" {
+  value       = module.eks_cluster.cluster_endpoint
+  description = "EKS cluster API endpoint"
+}
+
+output "cluster_arn" {
+  value       = module.eks_cluster.cluster_arn
+  description = "The Amazon Resource Name (ARN) of the cluster"
+}
+
+output "cluster_cert" {
+  value       = module.eks_cluster.cluster_certificate_authority_data
+  description = "Base64 encoded certificate authority data for the cluster"
+  sensitive   = true
+}
+
+output "cluster_version" {
+  value       = module.eks_cluster.cluster_version
+  description = "The Kubernetes server version for the cluster"
+}
+
+output "node_group_id" {
+  value       = module.eks_cluster.node_group_id
+  description = "EKS managed node group id"
+}
+
+output "node_group_status" {
+  value       = module.eks_cluster.node_group_status
+  description = "Status of the EKS managed node group"
+}
