@@ -102,7 +102,7 @@ variable "cluster_name" {
 variable "cluster_version" {
   type        = string
   description = "Kubernetes version to use for the EKS cluster"
-  default     = "1.31"
+  default     = "1.32"
 }
 
 variable "cluster_endpoint_private_access" {
@@ -158,4 +158,3 @@ variable "enable_cluster_creator_admin_permissions" {
   description = "Enable admin permission for cluster creator"
   default     = true
 }
-

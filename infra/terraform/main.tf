@@ -32,13 +32,15 @@ module "eks_cluster" {
 
   cluster_name                             = var.cluster_name
   cluster_version                          = var.cluster_version
+  region                                   = var.region
   cluster_endpoint_private_access          = var.cluster_endpoint_private_access
   cluster_endpoint_public_access           = var.cluster_endpoint_public_access
   cluster_endpoint_public_access_cidrs     = var.cluster_endpoint_public_access_cidrs
   enable_cluster_creator_admin_permissions = var.enable_cluster_creator_admin_permissions
-
-  vpc_id     = module.networking.vpc_id
-  subnet_ids = module.networking.private_subnets
+  authentication_mode                      = "API"
+  vpc_id                                   = module.networking.vpc_id
+  subnet_ids                               = module.networking.private_subnets
+  control_plane_subnet_ids                 = module.networking.private_subnets
 
   node_desired_capacity = var.node_desired_capacity
   node_max_capacity     = var.node_max_capacity
@@ -46,6 +48,7 @@ module "eks_cluster" {
   node_instance_types   = var.node_instance_types
 
   tags = var.common_tags
+
 }
 
 

@@ -47,3 +47,17 @@ variable "tags" {
   description = "Tags to apply to resources"
   default     = {}
 }
+
+variable "public_subnet_tags" {
+  type        = map(string)
+  description = "Public subnets Tags"
+  default     = {"kubernetes.io/role/elb" = 1}
+}
+
+variable "private_subnet_tags" {
+  type        = map(string)
+  description = "Private subnets Tags"
+  default     = {"kubernetes.io/role/internal-elb" = 1}
+}
+
+

@@ -1,3 +1,9 @@
+variable "region" {
+  type        = string
+  description = "AWS region for infrastructure deployment"
+  default     = "us-east-1"
+}
+
 variable "cluster_name" {
   type        = string
   description = "Name of the EKS cluster"
@@ -6,7 +12,7 @@ variable "cluster_name" {
 variable "cluster_version" {
   type        = string
   description = "Kubernetes version to use for the EKS cluster"
-  default     = "1.31"
+  default     = "1.35"
 }
 
 variable "vpc_id" {
@@ -22,7 +28,7 @@ variable "subnet_ids" {
 variable "cluster_endpoint_private_access" {
   type        = bool
   description = "Enable private API server endpoint"
-  default     = false
+  default     = true
 }
 
 variable "cluster_endpoint_public_access" {
@@ -58,7 +64,7 @@ variable "node_min_capacity" {
 variable "node_instance_types" {
   type        = list(string)
   description = "EC2 instance types for the worker nodes"
-  default     = ["t3.small"]
+  default     = ["t2.medium"]
 }
 
 variable "tags" {
@@ -77,4 +83,32 @@ variable "enable_cluster_creator_admin_permissions" {
   type        = bool
   description = "Enable admin permission for cluster creator"
   default     = true
+}
+
+variable "authentication_mode" {
+  description = "Auth mode"
+  type        = string
+}
+
+variable "create_kms_key" {
+  type        = bool
+  description = "Enable kms key creation"
+  default     = false
+}
+
+variable "enable_kms_key_rotation" {
+  type        = bool
+  description = "Enable kms key rotation"
+  default     = false
+}
+
+variable "enable_irsa" {
+  type        = bool
+  description = "Enable kms key rotation"
+  default     = true
+}
+
+variable "control_plane_subnet_ids" {
+  type        = list(string)
+  description = "Control plane subnets"
 }
