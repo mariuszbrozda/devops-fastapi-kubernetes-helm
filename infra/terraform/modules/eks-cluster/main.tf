@@ -18,27 +18,13 @@ module "eks" {
   enable_irsa = var.enable_irsa
 
   addons = {
-    coredns                = {}
+    coredns = {}
     eks-pod-identity-agent = {
       before_compute = true
     }
-    kube-proxy             = {}
-    vpc-cni                = {
-      before_compute = true
-    }
-  }
-
-  cluster_addons = {
+    kube-proxy = {}
     vpc-cni = {
-      most_recent = true
-    }
-
-    coredns = {
-      most_recent = true
-    }
-
-    kube-proxy = {
-      most_recent = true
+      before_compute = true
     }
   }
 
@@ -63,19 +49,19 @@ module "eks" {
     "kubernetes.io/cluster/${var.cluster_name}" = "shared"
   }
 
-access_entries = {
-  admin = {
-    principal_arn = data.aws_caller_identity.current.arn
+  access_entries = {
+    admin = {
+      principal_arn = data.aws_caller_identity.current.arn
 
-    policy_associations = {
-      admin = {
-        policy_arn = "arn:aws:eks::aws:cluster-access-policy/AmazonEKSClusterAdminPolicy"
-        access_scope = {
-          type = "cluster"
+      policy_associations = {
+        admin = {
+          policy_arn = "arn:aws:eks::aws:cluster-access-policy/AmazonEKSClusterAdminPolicy"
+          access_scope = {
+            type = "cluster"
+          }
         }
       }
     }
   }
-}
 
 }
