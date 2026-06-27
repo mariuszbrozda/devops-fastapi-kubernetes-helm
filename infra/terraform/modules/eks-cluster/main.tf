@@ -18,13 +18,16 @@ module "eks" {
   enable_irsa = var.enable_irsa
 
   cluster_addons = {
-    coredns = {}
-    eks-pod-identity-agent = {
-      before_compute = true
-    }
-    kube-proxy = {}
     vpc-cni = {
-      before_compute = true
+      addon_version = "v1.19.4-eksbuild.1"
+    }
+
+    coredns = {
+      addon_version = "v1.11.4-eksbuild.2"
+    }
+
+    kube-proxy = {
+      addon_version = "v1.35.0-eksbuild.1"
     }
   }
 
