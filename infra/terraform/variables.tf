@@ -158,3 +158,9 @@ variable "enable_cluster_creator_admin_permissions" {
   description = "Enable admin permission for cluster creator"
   default     = true
 }
+
+variable "map_public_ip_on_launch" {
+  type        = bool
+  description = "Enable public IP on launch"
+  default     = true
+}

@@ -9,13 +9,38 @@ module "eks" {
   cluster_endpoint_private_access      = var.cluster_endpoint_private_access
   cluster_endpoint_public_access       = var.cluster_endpoint_public_access
   cluster_endpoint_public_access_cidrs = var.cluster_endpoint_public_access_cidrs
-  control_plane_subnet_ids             = var.control_plane_subnet_ids
 
-  create_kms_key            = var.create_kms_key
-  enable_kms_key_rotation   = var.enable_kms_key_rotation
-  cluster_encryption_config = {}
+  create_kms_key                = var.create_kms_key
+  enable_kms_key_rotation       = var.enable_kms_key_rotation
+  cluster_encryption_config     = {}
+  bootstrap_self_managed_addons = false
 
   enable_irsa = var.enable_irsa
+
+  addons = {
+    coredns                = {}
+    eks-pod-identity-agent = {
+      before_compute = true
+    }
+    kube-proxy             = {}
+    vpc-cni                = {
+      before_compute = true
+    }
+  }
+
+  cluster_addons = {
+    vpc-cni = {
+      most_recent = true
+    }
+
+    coredns = {
+      most_recent = true
+    }
+
+    kube-proxy = {
+      most_recent = true
+    }
+  }
 
   eks_managed_node_group_defaults = {
     #  ami_type       = "AL2_x86_64"
@@ -37,5 +62,20 @@ module "eks" {
   tags = {
     "kubernetes.io/cluster/${var.cluster_name}" = "shared"
   }
+
+access_entries = {
+  admin = {
+    principal_arn = data.aws_caller_identity.current.arn
+
+    policy_associations = {
+      admin = {
+        policy_arn = "arn:aws:eks::aws:cluster-access-policy/AmazonEKSClusterAdminPolicy"
+        access_scope = {
+          type = "cluster"
+        }
+      }
+    }
+  }
+}
 
 }

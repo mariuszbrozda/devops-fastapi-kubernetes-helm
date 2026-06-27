@@ -107,8 +107,3 @@ variable "enable_irsa" {
   description = "Enable kms key rotation"
   default     = true
 }
-
-variable "control_plane_subnet_ids" {
-  type        = list(string)
-  description = "Control plane subnets"
-}

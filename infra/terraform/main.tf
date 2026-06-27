@@ -11,6 +11,7 @@ module "networking" {
   enable_dns_hostnames = var.enable_dns_hostnames
   enable_dns_support   = var.enable_dns_support
 
+
   tags = var.common_tags
 }
 
@@ -39,8 +40,7 @@ module "eks_cluster" {
   enable_cluster_creator_admin_permissions = var.enable_cluster_creator_admin_permissions
   authentication_mode                      = "API"
   vpc_id                                   = module.networking.vpc_id
-  subnet_ids                               = module.networking.private_subnets
-  control_plane_subnet_ids                 = module.networking.private_subnets
+  subnet_ids                               = module.networking.public_subnets
 
   node_desired_capacity = var.node_desired_capacity
   node_max_capacity     = var.node_max_capacity

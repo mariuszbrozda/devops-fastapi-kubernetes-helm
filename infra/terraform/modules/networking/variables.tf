@@ -60,4 +60,15 @@ variable "private_subnet_tags" {
   default     = { "kubernetes.io/role/internal-elb" = 1 }
 }
 
+variable "azs" {
+  description = "A list of availability zones names or ids in the region"
+  type        = list(string)
+  default     = ["us-east-1a", "us-east-1b"]
+}
+
+variable "map_public_ip_on_launch" {
+  type        = bool
+  description = "Enable public IP on launch"
+  default     = true
+}
 
