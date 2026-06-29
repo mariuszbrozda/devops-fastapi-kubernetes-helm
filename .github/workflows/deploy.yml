@@ -126,7 +126,7 @@ jobs:
       - name: Deploy App Helm Chart to EKS cluster
         run: |
           helm upgrade --install online-store deploy/charts/online-store --set image.repository=${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ secrets.AWS_REGION }}.amazonaws.com/${{ secrets.ECR_REPOSITORY }} --set image.tag=latest
-          sleep 5
+          sleep 120
 
       - name: Test Application via Load Ballancer
         run: |
@@ -140,4 +140,9 @@ jobs:
           echo "Deleting ECR image"
           aws ecr batch-delete-image --repository-name ${{ secrets.ECR_REPOSITORY }} --image-ids imageTag=latest
           echo "deleting Infra"
+          terraform destroy -auto-approve
+      - name: Destroy Terraform resources
+        working-directory: infra/terraform
+        if: always()
+        run: |
           terraform destroy -auto-approve
